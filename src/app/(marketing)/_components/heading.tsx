@@ -1,13 +1,20 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { useConvexAuth } from "convex/react";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+
+import { Spinner } from "@/components/spinner";
+import { Button } from "@/components/ui/button";
+import { SignInButton } from "@clerk/clerk-react";
 
 type HeadingProps = {
   id?: string;
 };
 
 export const Heading: React.FC<HeadingProps> = () => {
+  const { isAuthenticated, isLoading } = useConvexAuth();
+
   return (
     <div className="max-w-3xl space-y-4">
       <h1 className="text-3xl font-bold sm:text-5xl md:text-6xl">
@@ -19,9 +26,26 @@ export const Heading: React.FC<HeadingProps> = () => {
         organization that hits like a chart-topping melody – your ideas, your
         rhythm, your baby.
       </h3>
-      <Button>
-        Enter NoteBaby <ArrowRight className="ml-2 h-4 w-4" />
-      </Button>
+      {isLoading && (
+        <div className="W-full flex items-center justify-center">
+          <Spinner size="lg" />
+        </div>
+      )}
+      {isAuthenticated && !isLoading && (
+        <Button asChild>
+          <Link href="/documents">
+            Enter NoteBaby <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
+        </Button>
+      )}
+      {!isAuthenticated && !isLoading && (
+        <SignInButton>
+          <Button>
+            Get NoteBaby free
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </SignInButton>
+      )}
     </div>
   );
 };
