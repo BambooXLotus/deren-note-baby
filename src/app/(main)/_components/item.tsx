@@ -6,15 +6,24 @@ import {
   ChevronRight,
   Command,
   type LucideIcon,
+  MoreHorizontal,
   Plus,
+  Trash,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+import {
+  DropdownMenuContent,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { type Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
+import { useUser } from "@clerk/clerk-react";
+import { DropdownMenu, DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 
 type ItemProps = {
   id?: Id<"documents">;
@@ -42,17 +51,19 @@ export const Item = ({
   expanded,
 }: ItemProps) => {
   const ChevronIcon = expanded ? ChevronDown : ChevronRight;
+
   const router = useRouter();
+  const { user } = useUser();
+
   const create = useMutation(api.documents.create);
+  const archive = useMutation(api.documents.archive);
 
   function handleExpand(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     event.stopPropagation();
     onExpand?.();
   }
 
-  const handleCreate = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) => {
+  function handleCreate(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     event.stopPropagation();
 
     if (!id) return;
@@ -71,7 +82,19 @@ export const Item = ({
       success: "New note created!",
       error: "Failed to create a new note.",
     });
-  };
+  }
+
+  function handleArchive(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    event.stopPropagation();
+    if (!id) return;
+    const promise = archive({ id }).then(() => router.push("/documents"));
+
+    toast.promise(promise, {
+      loading: "Moving to trash...",
+      success: "Note moved to trash!",
+      error: "Failed to archive note.",
+    });
+  }
 
   return (
     <div
@@ -99,6 +122,7 @@ export const Item = ({
       )}
 
       <span className="truncate">{label}</span>
+
       {isSearch && (
         <kbd className="pointer-events-none ml-auto inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
           <span className="text-xs">
@@ -110,6 +134,33 @@ export const Item = ({
 
       {!!id && (
         <div className="ml-auto flex items-center gap-x-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger onClick={(e) => e.stopPropagation()} asChild>
+              <div
+                className="ml-auto h-full rounded-sm opacity-0 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600"
+                role="button"
+              >
+                <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="w-60"
+              align="start"
+              side="right"
+              forceMount
+            >
+              <DropdownMenuItem onClick={handleArchive}>
+                <div className="flex items-center p-1">
+                  <Trash className="mr-2 h-4 w-4" />
+                  Delete
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <div className="p-2 text-xs text-muted-foreground">
+                Last edited by: {user?.fullName}
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <div
             role="button"
             onClick={handleCreate}
