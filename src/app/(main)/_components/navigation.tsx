@@ -6,19 +6,27 @@ import { useMutation } from "convex/react";
 import {
   ChevronLeft,
   MenuIcon,
+  Plus,
   PlusCircle,
   Search,
   Settings,
+  Trash,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner";
 import { useMediaQuery } from "usehooks-ts";
 
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { api } from "@/convex/_generated/api";
 import { cn } from "@/lib/utils";
 
 import { DocumentList } from "./document-list";
 import { Item } from "./item";
+import { TrashBox } from "./trash-box";
 import { UserItem } from "./user-item";
 
 type NavigationProps = {
@@ -27,6 +35,7 @@ type NavigationProps = {
 
 export const Navigation: React.FC<NavigationProps> = () => {
   const pathname = usePathname();
+
   const isMobile = useMediaQuery("(max-width: 768px)");
   const create = useMutation(api.documents.create);
 
@@ -152,6 +161,18 @@ export const Navigation: React.FC<NavigationProps> = () => {
         </div>
         <div className="mt-4">
           <DocumentList />
+          <Item label="Add a Page" icon={Plus} onClick={handleCreate} />
+          <Popover>
+            <PopoverTrigger className="mt-4 w-full">
+              <Item label="Trash" icon={Trash} />
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-72 p-0"
+              side={isMobile ? "bottom" : "right"}
+            >
+              <TrashBox />
+            </PopoverContent>
+          </Popover>
         </div>
         <div
           className="absolute right-0 top-0 h-full w-1 cursor-ew-resize bg-primary/10 opacity-0 transition group-hover/sidebar:opacity-100"
