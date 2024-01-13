@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
 import { ConvexClientProvider } from "@/components/providers/convex-provider";
+import { ModalProvider } from "@/components/providers/modal-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TRPCReactProvider } from "@/trpc/react";
@@ -50,6 +51,7 @@ export default function RootLayout({
             >
               {children}
               <Toaster position="bottom-center" />
+              <ModalProvider />
             </ThemeProvider>
           </TRPCReactProvider>
         </ConvexClientProvider>

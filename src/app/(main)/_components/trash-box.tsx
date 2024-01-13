@@ -91,7 +91,7 @@ export const TrashBox: React.FC = () => {
             <span className="truncate pl-2">{document.title}</span>
             <div className="flex items-center">
               <div
-                className="rounded-sm p-2 hover:bg-neutral-200"
+                className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
                 onClick={(e) => handleRestore(e, document._id)}
                 role="button"
               >
@@ -99,7 +99,7 @@ export const TrashBox: React.FC = () => {
               </div>
               <ConfirmModal onConfirm={() => handleRemove(document._id)}>
                 <div
-                  className="rounded-sm p-2 hover:bg-neutral-200"
+                  className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
                   role="button"
                 >
                   <Trash className="h-4 w-4 text-muted-foreground" />

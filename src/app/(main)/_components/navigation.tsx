@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/popover";
 import { api } from "@/convex/_generated/api";
 import { useSearch } from "@/hooks/use-search";
+import { useSettings } from "@/hooks/use-settings";
 import { cn } from "@/lib/utils";
 
 import { DocumentList } from "./document-list";
@@ -37,6 +38,7 @@ type NavigationProps = {
 export const Navigation: React.FC<NavigationProps> = () => {
   const pathname = usePathname();
   const search = useSearch();
+  const settings = useSettings();
 
   const isMobile = useMediaQuery("(max-width: 768px)");
   const create = useMutation(api.documents.create);
@@ -158,7 +160,7 @@ export const Navigation: React.FC<NavigationProps> = () => {
         <div>
           <UserItem />
           <Item onClick={search.onOpen} label="Search" icon={Search} isSearch />
-          <Item onClick={handleCreate} label="Settings" icon={Settings} />
+          <Item onClick={settings.onOpen} label="Settings" icon={Settings} />
           <Item onClick={handleCreate} label="New page" icon={PlusCircle} />
         </div>
         <div className="mt-4">
