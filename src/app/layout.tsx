@@ -1,13 +1,12 @@
 import "@/styles/globals.css";
 
 import { Inter } from "next/font/google";
-import { cookies } from "next/headers";
 
 import { ConvexClientProvider } from "@/components/providers/convex-provider";
 import { ModalProvider } from "@/components/providers/modal-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { TRPCReactProvider } from "@/trpc/react";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -41,7 +40,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <ConvexClientProvider>
-          <TRPCReactProvider cookies={cookies().toString()}>
+          <EdgeStoreProvider>
             <ThemeProvider
               attribute="class"
               defaultTheme="system"
@@ -53,7 +52,7 @@ export default function RootLayout({
               <Toaster position="bottom-center" />
               <ModalProvider />
             </ThemeProvider>
-          </TRPCReactProvider>
+          </EdgeStoreProvider>
         </ConvexClientProvider>
       </body>
     </html>
