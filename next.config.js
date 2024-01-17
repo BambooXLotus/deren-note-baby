@@ -7,7 +7,12 @@ await import("./src/env.js");
 /** @type {import("next").NextConfig} */
 const config = {
   images: {
-    domains: ["files.edgestore.dev"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "files.edgestore.dev",
+      },
+    ],
   },
 };
 
