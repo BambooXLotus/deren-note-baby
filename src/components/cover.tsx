@@ -12,13 +12,14 @@ import { useEdgeStore } from "@/lib/edgestore";
 import { cn } from "@/lib/utils";
 
 import { Button } from "./ui/button";
+import { Skeleton } from "./ui/skeleton";
 
 type CoverProps = {
   url?: string;
   preview?: boolean;
 };
 
-export const Cover: React.FC<CoverProps> = ({ url, preview }) => {
+export const Cover = ({ url, preview }: CoverProps) => {
   const coverImage = useCoverImage();
 
   const params = useParams();
@@ -74,4 +75,8 @@ export const Cover: React.FC<CoverProps> = ({ url, preview }) => {
       )}
     </div>
   );
+};
+
+Cover.Skeleton = function CoverSkeleton() {
+  return <Skeleton className="h-[12dvh] w-full" />;
 };

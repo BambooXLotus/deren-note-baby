@@ -3,6 +3,7 @@
 import { useMutation } from "convex/react";
 import { PlusCircle } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -15,11 +16,14 @@ type DocumentsPageProps = {
 
 const DocumentsPage: React.FC<DocumentsPageProps> = () => {
   const { user } = useUser();
+  const router = useRouter();
 
   const create = useMutation(api.documents.create);
 
   function handleCreate() {
-    const promise = create({ title: "Untitled" });
+    const promise = create({ title: "Untitled" }).then((documentId) =>
+      router.push(`/documents/${documentId}`),
+    );
 
     toast.promise(promise, {
       loading: "Creating a new note...",
