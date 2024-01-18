@@ -9,6 +9,7 @@ import { type Id } from "@/convex/_generated/dataModel";
 
 import { Banner } from "./banner";
 import { Menu } from "./menu";
+import { Publish } from "./publish";
 import { Title } from "./title";
 
 type NavbarProps = {
@@ -56,6 +57,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex w-full items-center justify-between">
           <Title initialData={document} />
           <div className="flex items-center gap-x-2">
+            <Publish initialData={document} />
             <Menu documentId={document._id} />
           </div>
         </div>
