@@ -6,21 +6,27 @@ import { useTheme } from "next-themes";
 
 import { useEdgeStore } from "@/lib/edgestore";
 import { type BlockNoteEditor, type PartialBlock } from "@blocknote/core";
-import { BlockNoteView, useBlockNote } from "@blocknote/react";
+import {
+  BlockNoteView,
+  getDefaultReactSlashMenuItems,
+  useBlockNote,
+} from "@blocknote/react";
 
 type EditorProps = {
   onChange: (value: string) => void;
   initialContent?: string;
-  editable?: boolean;
+  isEditable?: boolean;
 };
 
 const Editor: React.FC<EditorProps> = ({
   onChange,
   initialContent,
-  editable,
+  isEditable,
 }) => {
+  const customSlashMenuItemList = [...getDefaultReactSlashMenuItems()];
+
   const editor: BlockNoteEditor = useBlockNote({
-    editable,
+    editable: isEditable,
     initialContent: initialContent
       ? (JSON.parse(initialContent) as PartialBlock[])
       : undefined,
@@ -29,6 +35,7 @@ const Editor: React.FC<EditorProps> = ({
       onChange(JSON.stringify(editor.topLevelBlocks, null, 2));
     },
     uploadFile: handleUpload,
+    slashMenuItems: customSlashMenuItemList,
   });
 
   const { edgestore } = useEdgeStore();

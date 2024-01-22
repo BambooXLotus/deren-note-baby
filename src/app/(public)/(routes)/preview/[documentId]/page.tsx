@@ -66,7 +66,7 @@ const DocumentIdPage: React.FC<DocumentIdPageProps> = ({
         <Editor
           onChange={handleChange}
           initialContent={document.content}
-          editable={false}
+          isEditable={false}
         />
       </div>
     </div>

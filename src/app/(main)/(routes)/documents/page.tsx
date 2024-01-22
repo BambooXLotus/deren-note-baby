@@ -10,11 +10,7 @@ import { Button } from "@/components/ui/button";
 import { api } from "@/convex/_generated/api";
 import { useUser } from "@clerk/clerk-react";
 
-type DocumentsPageProps = {
-  id?: string;
-};
-
-const DocumentsPage: React.FC<DocumentsPageProps> = () => {
+const DocumentsPage = () => {
   const { user } = useUser();
   const router = useRouter();
 

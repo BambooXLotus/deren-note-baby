@@ -58,7 +58,7 @@ export const Navigation: React.FC<NavigationProps> = () => {
     } else {
       resetWidth();
     }
-  }, [isMobile]);
+  }, [isMobile, resetWidth]);
 
   useEffect(() => {
     if (isMobile) {
