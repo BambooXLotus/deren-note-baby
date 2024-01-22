@@ -1,11 +1,17 @@
 "use client";
 
-import "@blocknote/core/style.css";
+import "@blocknote/react/style.css";
 
 import { useTheme } from "next-themes";
 
 import { useEdgeStore } from "@/lib/edgestore";
-import { type BlockNoteEditor, type PartialBlock } from "@blocknote/core";
+import {
+  type BlockNoteEditor,
+  type DefaultBlockSchema,
+  type DefaultInlineContentSchema,
+  type DefaultStyleSchema,
+  type PartialBlock,
+} from "@blocknote/core";
 import {
   BlockNoteView,
   getDefaultReactSlashMenuItems,
@@ -25,12 +31,17 @@ const Editor: React.FC<EditorProps> = ({
 }) => {
   const customSlashMenuItemList = [...getDefaultReactSlashMenuItems()];
 
+  const initialBlocks = initialContent
+    ? (JSON.parse(initialContent) as PartialBlock<
+        DefaultBlockSchema,
+        DefaultInlineContentSchema,
+        DefaultStyleSchema
+      >[])
+    : undefined;
+
   const editor: BlockNoteEditor = useBlockNote({
     editable: isEditable,
-    initialContent: initialContent
-      ? (JSON.parse(initialContent) as PartialBlock[])
-      : undefined,
-
+    initialContent: initialBlocks,
     onEditorContentChange: (editor) => {
       onChange(JSON.stringify(editor.topLevelBlocks, null, 2));
     },
